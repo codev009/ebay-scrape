@@ -59,11 +59,24 @@ func scrapePageData(doc *goquery.Document) {
 func main() {
 	url := "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=beatles+puzzle&_sacat=0&_odkw=beatles+pluzzle&_osacat=0"
 
-	response := getHtml(url)
-	defer response.Body.Close()
+	var previousUrl string
 
-	doc, error := goquery.NewDocumentFromReader(response.Body)
-	check(error)
+	for {
+		response := getHtml(url)
+		defer response.Body.Close()
 
-	scrapePageData(doc)
+		doc, error := goquery.NewDocumentFromReader(response.Body)
+		check(error)
+
+		scrapePageData(doc)
+
+		href, _ := doc.Find("nav.pagination>a.pagination__next").Attr("href")
+
+		if href == previousUrl {
+			break
+		} else {
+			url = href
+			previousUrl = href
+		}
+	}
 }
