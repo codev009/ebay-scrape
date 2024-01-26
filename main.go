@@ -30,7 +30,10 @@ func scrapePageData(doc *goquery.Document) {
 		a := item.Find("a.s-item__link")
 
 		title := strings.TrimSpace(a.Text())
-		fmt.Println(title)
+		url, _ := a.Attr("href")
+
+		price_span := item.Find("span.s-item__price").Text()
+		fmt.Println(price_span, title, url)
 	})
 }
 
