@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -28,7 +29,7 @@ func scrapePageData(doc *goquery.Document) {
 	doc.Find("ul.srp-results>li.s-item").Each(func(index int, item *goquery.Selection) {
 		a := item.Find("a.s-item__link")
 
-		title := a.Text()
+		title := strings.TrimSpace(a.Text())
 		fmt.Println(title)
 	})
 }
